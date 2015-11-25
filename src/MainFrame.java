@@ -2,7 +2,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class MainFrame extends JFrame {
@@ -13,7 +12,8 @@ public class MainFrame extends JFrame {
 	public MainFrame() throws Exception {
 		super();
 		
-		panel = new MainPanel(ImageIO.read(getClass().getResource("resources/lenna.png")));
+		panel = new MainPanel();
+		panel.load(getClass().getResource("resources/lenna.png"));
 		
 		add(panel, BorderLayout.CENTER);
 		add(new TopPanel(panel), BorderLayout.PAGE_START);

@@ -1,17 +1,17 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
+import filter.BlurFilter;
+import filter.BorderFilter;
+import filter.EmbossFilter;
 import filter.GrayScaleFilter;
 import filter.InvertFilter;
-import filter.MatrixFilter;
+import filter.SharpenFilter;
 import filter.UniformFilter;
 
 
@@ -29,7 +29,7 @@ public class TabPanel extends JPanel {
 		details_panel = dp;
 		setLayout(new GridLayout(1, 0));
 		
-		tbArray = new JToggleButton[3];
+		tbArray = new JToggleButton[4];
 		
 		JButton button;
 		JToggleButton tab;
@@ -70,14 +70,62 @@ public class TabPanel extends JPanel {
 		});
 		add(button);
 		
-		tab = new JToggleButton("Sort");
+		button = new JButton("Blur");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i = 0; i < tbArray.length; ++i)
+					tbArray[i].setSelected(false);
+				details_panel.setVisible(false);
+				main_panel.apply(new BlurFilter());
+			}
+		});
+		add(button);
+		
+		button = new JButton("Sharpen");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i = 0; i < tbArray.length; ++i)
+					tbArray[i].setSelected(false);
+				details_panel.setVisible(false);
+				main_panel.apply(new SharpenFilter());
+			}
+		});
+		add(button);
+		
+		button = new JButton("Borders");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i = 0; i < tbArray.length; ++i)
+					tbArray[i].setSelected(false);
+				details_panel.setVisible(false);
+				main_panel.apply(new BorderFilter());
+			}
+		});
+		add(button);
+		
+		button = new JButton("Emboss");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i = 0; i < tbArray.length; ++i)
+					tbArray[i].setSelected(false);
+				details_panel.setVisible(false);
+				main_panel.apply(new EmbossFilter());
+			}
+		});
+		add(button);
+		
+		tab = new JToggleButton("Gamma");
 		tab.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(((JToggleButton)e.getSource()).isSelected()) {
 					for(int i = 0; i < tbArray.length; ++i)
 						if(i != 0) tbArray[i].setSelected(false);
-					details_panel.setMode(DetailsPanel.MODE_SORT);
+					details_panel.setMode(DetailsPanel.MODE_GAMMA);
 					details_panel.applyCurrentSettings();
 					details_panel.setVisible(true);
 				} else {
@@ -89,14 +137,14 @@ public class TabPanel extends JPanel {
 		add(tab);
 		tbArray[0] = tab;
 		
-		tab = new JToggleButton("Matrix");
+		tab = new JToggleButton("Sort");
 		tab.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(((JToggleButton)e.getSource()).isSelected()) {
 					for(int i = 0; i < tbArray.length; ++i)
 						if(i != 1) tbArray[i].setSelected(false);
-					details_panel.setMode(DetailsPanel.MODE_MATRIX);
+					details_panel.setMode(DetailsPanel.MODE_SORT);
 					details_panel.applyCurrentSettings();
 					details_panel.setVisible(true);
 				} else {
@@ -108,14 +156,14 @@ public class TabPanel extends JPanel {
 		add(tab);
 		tbArray[1] = tab;
 		
-		tab = new JToggleButton("Gaussian");
+		tab = new JToggleButton("Matrix");
 		tab.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(((JToggleButton)e.getSource()).isSelected()) {
 					for(int i = 0; i < tbArray.length; ++i)
 						if(i != 2) tbArray[i].setSelected(false);
-					details_panel.setMode(DetailsPanel.MODE_GAUSSIAN);
+					details_panel.setMode(DetailsPanel.MODE_MATRIX);
 					details_panel.applyCurrentSettings();
 					details_panel.setVisible(true);
 				} else {
@@ -126,6 +174,25 @@ public class TabPanel extends JPanel {
 		});
 		add(tab);
 		tbArray[2] = tab;
+		
+		tab = new JToggleButton("Gaussian");
+		tab.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(((JToggleButton)e.getSource()).isSelected()) {
+					for(int i = 0; i < tbArray.length; ++i)
+						if(i != 3) tbArray[i].setSelected(false);
+					details_panel.setMode(DetailsPanel.MODE_GAUSSIAN);
+					details_panel.applyCurrentSettings();
+					details_panel.setVisible(true);
+				} else {
+					details_panel.setVisible(false);
+					main_panel.apply(new UniformFilter());
+				}
+			}
+		});
+		add(tab);
+		tbArray[3] = tab;
 		
 		details_panel.setVisible(false);
 	}

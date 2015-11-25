@@ -1,10 +1,8 @@
 package filter;
 
-import java.awt.image.BufferedImage;
-
 import color.Color;
 
-public class GrayScaleFilter implements Filter {
+public class GrayScaleFilter extends PixelFilter {
 	private Color color;
 	private double r, g, b;
 	
@@ -20,8 +18,8 @@ public class GrayScaleFilter implements Filter {
 	}
 	
 	@Override
-	public int sample(int x, int y, BufferedImage img) {
-		color.setInt(img.getRGB(x, y));
+	public int sample(int c) {
+		color.setInt(c);
 		double avg = (r*color.r + g*color.g + b*color.b);
 		color.set(avg, avg, avg);
 		return color.getInt();

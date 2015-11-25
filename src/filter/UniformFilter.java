@@ -1,10 +1,8 @@
 package filter;
 
-import java.awt.image.BufferedImage;
-
-public class UniformFilter implements Filter {
+public class UniformFilter extends PixelFilter {
 	@Override
-	public int sample(int x, int y, BufferedImage img) {
-		return img.getRGB(x, y);
+	public int sample(int c) {
+		return c;
 	}
 }

@@ -5,7 +5,6 @@ import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import color.Color;
 
+import filter.GammaFilter;
 import filter.GaussianFilter;
 import filter.MatrixFilter;
 import filter.SortFilter;
@@ -28,7 +28,8 @@ public class DetailsPanel extends JPanel {
 	public static final int
 	  MODE_SORT      = 0x01,
 	  MODE_MATRIX    = 0x02,
-	  MODE_GAUSSIAN  = 0x03;
+	  MODE_GAUSSIAN  = 0x03,
+	  MODE_GAMMA     = 0x04;
 	
 	private int current_mode;
 	
@@ -44,6 +45,9 @@ public class DetailsPanel extends JPanel {
 	private JPanel gaussian_panel;
 	private JSlider eSigma;
 	
+	private JPanel gamma_panel;
+	private JSlider ePower;
+	
 	private JPanel current_panel = null;
 	
 	private MainPanel main_panel;
@@ -57,6 +61,7 @@ public class DetailsPanel extends JPanel {
 		JPanel cells, line;
 		JSpinner spinner;
 		JCheckBox checkbox;
+		JSlider slider;
 		
 		ActionListener action_listener = new ActionListener() {
 			@Override
@@ -127,11 +132,19 @@ public class DetailsPanel extends JPanel {
 		
 		gaussian_panel = new JPanel();
 		gaussian_panel.add(new Label("Sigma: 0.5"));
-		JSlider slider = new JSlider(1, 8, 2);
+		slider = new JSlider(1, 8, 2);
 		slider.addChangeListener(change_listener);
 		gaussian_panel.add(slider);
 		eSigma = slider;
 		gaussian_panel.add(new Label("4"));
+		
+		gamma_panel = new JPanel();
+		gamma_panel.add(new JLabel("Power: 0.1"));
+		slider = new JSlider(-10,10,0);
+		slider.addChangeListener(change_listener);
+		gamma_panel.add(slider);
+		ePower = slider;
+		gamma_panel.add(new JLabel("10"));
 	}
 	
 	public void applyCurrentSettings() {
@@ -172,6 +185,12 @@ public class DetailsPanel extends JPanel {
 			break;
 		case MODE_GAUSSIAN:
 			main_panel.apply(new GaussianFilter(0.5*eSigma.getValue()));
+		case MODE_GAMMA:
+			{
+				double pow = -0.1*ePower.getValue();
+				main_panel.apply(new GammaFilter(Math.pow(10, pow)));
+			}
+			break;
 		default:
 			break;
 		}
@@ -191,6 +210,9 @@ public class DetailsPanel extends JPanel {
 			break;
 		case MODE_GAUSSIAN:
 			current_panel = gaussian_panel;
+			break;
+		case MODE_GAMMA:
+			current_panel = gamma_panel;
 			break;
 		default:
 			System.err.println("unknown mode");

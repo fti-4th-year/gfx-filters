@@ -12,22 +12,25 @@ public class ImagePanel extends JPanel {
 	
 	private BufferedImage image;
 	
-	public ImagePanel(BufferedImage src) {
+	public ImagePanel() {
 		super();
 		setBackground(new Color(0x0000FF));
 		setBorder(BorderFactory.createLineBorder(getBackground(), 5));
-		image = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_RGB);
-		for(int iy = 0; iy < image.getHeight(); ++iy) {
-			for(int ix = 0; ix < image.getWidth(); ++ix) {
-				image.setRGB(ix, iy, src.getRGB(ix, iy));
-			}
-		}
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(image, (getWidth() - image.getWidth())/2, (getHeight() - image.getHeight())/2, null);
+	}
+	
+	public void loadImage(BufferedImage src) {
+		image = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_RGB);
+		for(int iy = 0; iy < image.getHeight(); ++iy) {
+			for(int ix = 0; ix < image.getWidth(); ++ix) {
+				image.setRGB(ix, iy, src.getRGB(ix, iy));
+			}
+		}
 	}
 	
 	public BufferedImage getImage() {

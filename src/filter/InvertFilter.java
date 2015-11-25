@@ -1,17 +1,15 @@
 package filter;
 
-import java.awt.image.BufferedImage;
-
 import color.Color;
 
-public class InvertFilter implements Filter {
+public class InvertFilter extends PixelFilter {
 	private Color tmp;
 	public InvertFilter() {
 		tmp = new Color();
 	}
 	@Override
-	public int sample(int x, int y, BufferedImage img) {
-		tmp.setInt(img.getRGB(x, y));
+	public int sample(int c) {
+		tmp.setInt(c);
 		tmp.multiply(-1.0);
 		tmp.add(Color.WHITE);
 		return tmp.getInt();
